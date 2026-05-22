@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mi Perfil | Frikistore{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+        
+        {# Sidebar #}
+        <aside class="lg:col-span-1">
+            <div class="bg-friki-card border border-slate-800 rounded-3xl p-8 text-center sticky top-28">
+                <div class="w-24 h-24 bg-friki-accent/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-friki-accent shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                    <span class="text-3xl font-black text-white font-orbitron">{{ user.nombre|first|upper }}{{ user.apellidos|first|upper }}</span>
+                </div>
+                <h2 class="text-xl font-bold text-white mb-1">{{ user.nombre }} {{ user.apellidos }}</h2>
+                <p class="text-slate-500 text-sm mb-6">{{ user.email }}</p>
+                
+                <div class="space-y-2">
+                    <a href="{{ path('app_user_profile') }}" class="block w-full py-3 px-4 rounded-xl bg-friki-accent text-white font-bold text-sm transition-all">
+                        <i class="fa-solid fa-gauge-high mr-2"></i> Mi Panel
+                    </a>
+                    <a href="#" class="block w-full py-3 px-4 rounded-xl hover:bg-slate-800 text-slate-400 font-bold text-sm transition-all text-left">
+                        <i class="fa-solid fa-user-pen mr-2"></i> Editar Perfil
+                    </a>
+                    <a href="{{ path('app_logout') }}" class="block w-full py-3 px-4 rounded-xl hover:bg-red-900/20 text-red-500 font-bold text-sm transition-all text-left">
+                        <i class="fa-solid fa-power-off mr-2"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        {# Main Content #}
+        <div class="lg:col-span-3">
+            <h1 class="text-3xl font-black font-orbitron text-white mb-10 uppercase tracking-widest">
+                HISTORIAL DE <span class="text-friki-accent">MISIONES</span>
+            </h1>
+
+            <div class="bg-friki-card border border-slate-800 rounded-3xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-900/50 border-b border-slate-800">
+                                <th class="px-6 py-4 text-xs font-black text-slate-500 uppercase tracking-widest">Nº Pedido</th>
+                                <th class="px-6 py-4 text-xs font-black text-slate-500 uppercase tracking-widest">Fecha</th>
+                                <th class="px-6 py-4 text-xs font-black text-slate-500 uppercase tracking-widest">Total</th>
+                                <th class="px-6 py-4 text-xs font-black text-slate-500 uppercase tracking-widest">Estado</th>
+                                <th class="px-6 py-4 text-xs font-black text-slate-500 uppercase tracking-widest text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            {% for pedido in pedidos %}
+                                <tr class="hover:bg-slate-800/30 transition-colors group">
+                                    <td class="px-6 py-4 font-mono font-bold text-friki-accent text-sm">{{ pedido.numeroPedido }}</td>
+                                    <td class="px-6 py-4 text-slate-400 text-sm">{{ pedido.createdAt|date('d/m/Y') }}</td>
+                                    <td class="px-6 py-4 text-white font-bold text-sm">{{ pedido.total|number_format(2, ',', '.') }}€</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase border 
+                                            {% if pedido.estado == 'completado' %}bg-green-500/10 text-green-500 border-green-500/30
+                                            {% elseif pedido.estado == 'cancelado' %}bg-red-500/10 text-red-500 border-red-500/30
+                                            {% else %}bg-yellow-500/10 text-yellow-500 border-yellow-500/30{% endif %}">
+                                            {{ pedido.estado }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button class="p-2 text-slate-500 hover:text-white transition-colors">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="px-6 py-20 text-center">
+                                        <div class="text-4xl mb-4">🛸</div>
+                                        <p class="text-slate-500 font-bold">Aún no has realizado ninguna misión comercial.</p>
+                                        <a href="{{ path('product_index') }}" class="text-friki-accent hover:underline mt-2 inline-block">¡Empieza tu aventura!</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

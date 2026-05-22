@@ -1,0 +1,141 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inicio | Frikistore{% endblock %}
+
+{% block body %}
+    {# Hero Section #}
+    <section class="relative h-[70vh] flex items-center overflow-hidden border-b border-friki-neon/20">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=2070" class="w-full h-full object-cover opacity-30 scale-105 hover:scale-100 transition-transform duration-1000" alt="Hero Background">
+            <div class="absolute inset-0 bg-gradient-to-r from-friki-dark via-friki-dark/60 to-transparent"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-2xl">
+                <span class="inline-block px-3 py-1 rounded-full bg-friki-neon/10 border border-friki-neon/30 text-friki-neon text-xs font-bold tracking-widest uppercase mb-6 animate-pulse">
+                    Nuevos lanzamientos disponibles
+                </span>
+                <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
+                    EQUÍPATE PARA <br>
+                    <span class="text-friki-neon neon-text">EL SIGUIENTE NIVEL</span>
+                </h1>
+                <p class="text-lg text-slate-300 mb-10 max-w-lg leading-relaxed">
+                    La mayor colección de figuras, videojuegos y merchandising oficial. Si es friki, está aquí. Envíos gratuitos en pedidos superiores a 50€.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="{{ path('product_index') }}" class="px-8 py-4 bg-friki-neon text-friki-dark font-black rounded-xl hover:bg-white transition-all transform hover:-translate-y-1 shadow-lg shadow-friki-neon/20">
+                        EXPLORAR CATÁLOGO
+                    </a>
+                    <a href="#" class="px-8 py-4 bg-transparent border-2 border-slate-700 text-white font-bold rounded-xl hover:border-friki-neon hover:text-friki-neon transition-all">
+                        OFERTAS DE TEMPORADA
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# Featured Categories #}
+    <section class="py-20 bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {# Category Card 1 #}
+                <a href="{{ path('product_index', {'categoria': 'Videojuegos'}) }}" class="group relative h-64 overflow-hidden rounded-2xl border border-slate-700 hover:border-friki-neon transition-all">
+                    <img src="https://images.unsplash.com/photo-1605899435973-ca2d1a8861cf?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-110 transition-all duration-500" alt="Videojuegos">
+                    <div class="absolute inset-0 bg-gradient-to-t from-friki-dark to-transparent"></div>
+                    <div class="absolute bottom-6 left-6">
+                        <h3 class="text-2xl font-bold font-orbitron group-hover:text-friki-neon">Videojuegos</h3>
+                        <p class="text-slate-400 text-sm">Hardware, Software y Accesorios</p>
+                    </div>
+                </a>
+                {# Category Card 2 #}
+                <a href="{{ path('product_index', {'categoria': 'Anime'}) }}" class="group relative h-64 overflow-hidden rounded-2xl border border-slate-700 hover:border-friki-neon transition-all">
+                    <img src="https://images.unsplash.com/photo-1613336026275-d6d473084e85?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-110 transition-all duration-500" alt="Anime">
+                    <div class="absolute inset-0 bg-gradient-to-t from-friki-dark to-transparent"></div>
+                    <div class="absolute bottom-6 left-6">
+                        <h3 class="text-2xl font-bold font-orbitron group-hover:text-friki-neon">Anime & Manga</h3>
+                        <p class="text-slate-400 text-sm">Figuras, Tomos y Merch</p>
+                    </div>
+                </a>
+                {# Category Card 3 #}
+                <a href="{{ path('product_index', {'categoria': 'Juegos de mesa'}) }}" class="group relative h-64 overflow-hidden rounded-2xl border border-slate-700 hover:border-friki-neon transition-all">
+                    <img src="https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-110 transition-all duration-500" alt="Juegos de mesa">
+                    <div class="absolute inset-0 bg-gradient-to-t from-friki-dark to-transparent"></div>
+                    <div class="absolute bottom-6 left-6">
+                        <h3 class="text-2xl font-bold font-orbitron group-hover:text-friki-neon">Estrategia</h3>
+                        <p class="text-slate-400 text-sm">Juegos de Mesa y TCG</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    {# Featured Products #}
+    <section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h2 class="text-4xl font-bold mb-4 font-orbitron">NOVEDADES <span class="text-friki-neon">ESTELARES</span></h2>
+                <div class="h-1 w-24 bg-friki-neon rounded-full"></div>
+            </div>
+            <a href="{{ path('product_index') }}" class="text-slate-400 hover:text-friki-neon font-bold flex items-center transition-colors">
+                VER TODO EL CATÁLOGO <i class="fa-solid fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {% for producto in novedades %}
+                {# Product Card #}
+                <div class="bg-friki-card rounded-2xl border border-slate-800 overflow-hidden group hover:border-friki-neon transition-all hover:shadow-[0_0_20px_rgba(34,197,94,0.1)]">
+                    <div class="relative h-64 overflow-hidden bg-slate-900">
+                        <a href="{{ path('product_show', {'id': producto.id}) }}">
+                            <img src="{{ producto.imagenUrl|default('https://placehold.co/600x600/1e293b/22c55e?text=' ~ producto.nombre|url_encode) }}" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                                 alt="{{ producto.nombre }}">
+                        </a>
+                        <div class="absolute top-4 right-4 bg-friki-dark/80 backdrop-blur px-3 py-1 rounded-lg border border-slate-700">
+                            <span class="text-friki-neon font-bold text-sm">{{ producto.precio|number_format(2, ',', '.') }}€</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-friki-accent text-xs font-bold uppercase tracking-widest mb-2">{{ producto.categoria }}</p>
+                        <h3 class="text-lg font-bold mb-4 line-clamp-1 group-hover:text-friki-neon transition-colors">
+                            <a href="{{ path('product_show', {'id': producto.id}) }}">{{ producto.nombre }}</a>
+                        </h3>
+                        <div class="flex items-center justify-between mt-auto">
+                            <div class="flex text-yellow-500 text-xs">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star-half-stroke"></i>
+                            </div>
+                            <button class="bg-slate-800 p-2 rounded-lg hover:bg-friki-neon hover:text-friki-dark transition-all">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p class="col-span-full text-center text-slate-500 py-10">No hay novedades espaciales en este momento.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    {# Newsletter / Join the club #}
+    <section class="py-20 px-4">
+        <div class="max-w-5xl mx-auto bg-gradient-to-br from-friki-card to-friki-dark rounded-3xl p-12 border border-slate-800 relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mt-20 -mr-20 w-64 h-64 bg-friki-neon opacity-10 blur-[100px] rounded-full"></div>
+            <div class="relative z-10 text-center">
+                <h2 class="text-3xl md:text-5xl font-bold font-orbitron mb-6">ÚNETE A LA <span class="text-friki-neon">RESISTENCIA</span></h2>
+                <p class="text-slate-400 max-w-xl mx-auto mb-10">
+                    Suscríbete para recibir ofertas exclusivas, preventas y noticias sobre el mundo friki antes que nadie.
+                </p>
+                <form class="flex flex-col md:flex-row gap-4 max-w-md mx-auto">
+                    <input type="email" placeholder="Tu email espacial" class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-6 py-4 focus:ring-2 focus:ring-friki-neon focus:border-transparent outline-none transition-all">
+                    <button class="bg-friki-neon text-friki-dark font-black px-8 py-4 rounded-xl hover:bg-white transition-all transform active:scale-95">
+                        SUSCRIBIRME
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

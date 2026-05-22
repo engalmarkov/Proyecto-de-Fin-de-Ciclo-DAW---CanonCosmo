@@ -1,0 +1,55 @@
+<div class="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-2xl w-full space-y-8 bg-friki-card p-10 rounded-3xl border border-slate-800 shadow-2xl relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-friki-accent opacity-10 blur-[60px] rounded-full"></div>
+      
+      <div class="text-center">
+          <h2 class="mt-6 text-3xl font-black font-orbitron text-white uppercase tracking-tighter">
+              CREA TU <span class="text-friki-accent">PERFIL DE HÉROE</span>
+          </h2>
+          <p class="mt-2 text-sm text-slate-400">
+              Únete a la mayor comunidad de coleccionistas del multiverso
+          </p>
+      </div>
+
+      <form class="mt-8 space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <div *ngIf="error" class="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-xl text-sm">
+              {{ error }}
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="col-span-1">
+                  <label for="nombre" class="block text-sm font-bold text-slate-300 mb-2">Nombre</label>
+                  <input type="text" formControlName="nombre" id="nombre" class="appearance-none block w-full px-4 py-3 border border-slate-700 placeholder-slate-500 text-white bg-slate-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-friki-accent transition-all" placeholder="Ej: Luffy">
+              </div>
+              <div class="col-span-1">
+                  <label for="apellidos" class="block text-sm font-bold text-slate-300 mb-2">Apellidos</label>
+                  <input type="text" formControlName="apellidos" id="apellidos" class="appearance-none block w-full px-4 py-3 border border-slate-700 placeholder-slate-500 text-white bg-slate-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-friki-accent transition-all" placeholder="Ej: Monkey D.">
+              </div>
+              <div class="col-span-full">
+                  <label for="email" class="block text-sm font-bold text-slate-300 mb-2">Email</label>
+                  <input type="email" formControlName="email" id="email" class="appearance-none block w-full px-4 py-3 border border-slate-700 placeholder-slate-500 text-white bg-slate-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-friki-accent transition-all" placeholder="tu@universo.com">
+              </div>
+              <div class="col-span-full">
+                  <label for="password" class="block text-sm font-bold text-slate-300 mb-2">Contraseña (Mín. 4 caracteres)</label>
+                  <input type="password" formControlName="password" id="password" class="appearance-none block w-full px-4 py-3 border border-slate-700 placeholder-slate-500 text-white bg-slate-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-friki-accent transition-all">
+              </div>
+          </div>
+
+          <div>
+              <button type="submit" 
+                      [disabled]="registerForm.invalid || loading"
+                      class="group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-black rounded-xl text-white bg-friki-accent hover:bg-white hover:text-friki-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-friki-accent transition-all transform active:scale-95 shadow-lg shadow-friki-accent/20 uppercase tracking-widest font-orbitron disabled:opacity-50">
+                  <span *ngIf="!loading">FORJAR CUENTA</span>
+                  <span *ngIf="loading" class="animate-pulse">FORJANDO...</span>
+              </button>
+          </div>
+      </form>
+
+      <div class="text-center mt-6">
+          <p class="text-slate-400 text-sm">
+              ¿Ya tienes rango en la resistencia? 
+              <a routerLink="/login" class="font-bold text-friki-accent hover:text-white transition-colors">Inicia sesión</a>
+          </p>
+      </div>
+  </div>
+</div>

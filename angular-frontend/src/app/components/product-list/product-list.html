@@ -1,0 +1,118 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="flex flex-col md:flex-row gap-8">
+
+        <aside class="w-full md:w-64 flex-shrink-0">
+            <div class="sticky top-28 space-y-8">
+                <div>
+                    <h3 class="font-orbitron mb-4 text-white uppercase tracking-widest text-sm">Categorías</h3>
+                    <div class="space-y-2">
+                        @for (cat of categorias; track cat) {
+                        <a [routerLink]="['/productos']" [queryParams]="{ categoria: $any(cat)?.nombre || cat }"
+                            class="block px-4 py-2 rounded-lg transition-all text-sm"
+                            [class.bg-friki-neon]="categoriaActual === ($any(cat)?.nombre || cat)"
+                            [class.text-friki-dark]="categoriaActual === ($any(cat)?.nombre || cat)"
+                            [class.font-bold]="categoriaActual === ($any(cat)?.nombre || cat)"
+                            [class.text-slate-400]="categoriaActual !== ($any(cat)?.nombre || cat)"
+                            [class.hover:bg-slate-800]="categoriaActual !== ($any(cat)?.nombre || cat)">
+                            {{ $any(cat)?.nombre || cat }}
+                        </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="flex-grow">
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+                <h2 class="text-2xl font-bold font-orbitron uppercase">
+                    CATÁLOGO <span class="text-friki-neon">{{ categoriaActual }}</span>
+                    <span class="text-sm font-normal text-slate-500 ml-2">({{ productos.length }} resultados)</span>
+                </h2>
+            </div>
+
+            @if (loading) {
+            <div class="flex justify-center py-20">
+                <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-friki-neon"></div>
+            </div>
+            } @else {
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                @for (producto of productos; track producto.id) {
+                <div
+                    class="bg-friki-card rounded-2xl border border-slate-800 overflow-hidden group hover:border-friki-neon/50 transition-all duration-300 relative flex flex-col">
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-r from-friki-neon to-friki-accent opacity-0 group-hover:opacity-10 blur transition duration-500">
+                    </div>
+
+                    <div class="relative h-64 overflow-hidden bg-slate-900 flex-shrink-0">
+                        <a [routerLink]="['/productos', producto.id]">
+                            <img [src]="$any(producto).imagenUrl || producto.imagen_url || 'https://placehold.co/600x600/1e293b/22c55e?text=' + producto.nombre"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                [alt]="producto.nombre">
+                        </a>
+
+                        <div
+                            class="absolute top-4 right-4 bg-friki-dark/90 backdrop-blur px-3 py-1.5 rounded-lg border border-slate-700 shadow-lg z-10">
+                            @if (producto.precioOferta) {
+                            <div class="flex flex-col items-end leading-none">
+                                <span class="text-red-400 line-through text-[10px] mb-0.5">{{ producto.precio }}€</span>
+                                <span class="text-friki-neon font-black text-sm">{{ producto.precioOferta }}€</span>
+                            </div>
+                            } @else {
+                            <span class="text-white font-bold text-sm">{{ producto.precio }}€</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="p-6 flex flex-col flex-grow bg-friki-card relative z-10">
+                        <p class="text-friki-accent text-[10px] font-black uppercase tracking-widest mb-1">
+                            {{ $any(producto.categoria)?.nombre || 'Sin Categoría' }}
+                        </p>
+
+                        <a [routerLink]="['/productos', producto.id]"
+                            class="text-lg font-bold mb-4 line-clamp-1 group-hover:text-friki-neon transition-colors block">
+                            {{ producto.nombre }}
+                        </a>
+
+                        <p class="text-slate-400 text-sm line-clamp-2 mb-6 h-10">
+                            {{ producto.descripcion }}
+                        </p>
+
+                        <div class="flex items-center justify-between gap-2 mt-auto">
+                            <a [routerLink]="['/productos', producto.id]"
+                                class="flex-grow text-center py-2 rounded-lg bg-slate-800 text-sm font-bold hover:bg-slate-700 transition-all border border-slate-700">
+                                Detalles
+                            </a>
+                            <button (click)="agregarAlCarrito(producto, $event)"
+                                class="bg-friki-neon text-friki-dark p-2 rounded-lg hover:bg-white transition-all transform active:scale-90">
+                                <i class="fa-solid fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                } @empty {
+                <div class="col-span-full py-20 text-center">
+                    <div class="text-6xl mb-6">🔍</div>
+                    <h3 class="text-2xl font-orbitron mb-2">No hay productos en esta categoría...</h3>
+                    <p class="text-slate-500">Prueba con otra categoría o recarga la página.</p>
+                </div>
+                }
+
+            </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+@if (mostrarToast) {
+<div class="fixed bottom-8 right-8 z-50 bg-slate-900 border border-friki-neon rounded-2xl p-4 shadow-[0_0_25px_rgba(0,255,255,0.4)] flex items-center gap-4 transition-all duration-300 animate-bounce">
+    <div class="bg-friki-neon/20 text-friki-neon h-12 w-12 flex items-center justify-center rounded-xl border border-friki-neon/30">
+        <i class="fa-solid fa-cart-arrow-down text-xl"></i>
+    </div>
+    <div class="pr-4">
+        <p class="text-white font-bold font-orbitron uppercase tracking-widest text-sm mb-0.5">¡Producto Añadido!</p>
+        <p class="text-slate-400 text-sm"><span class="text-friki-neon font-bold">{{ mensajeToast }}</span> en la bolsa.</p>
+    </div>
+</div>
+}

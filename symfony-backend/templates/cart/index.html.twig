@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tu Carrito | Frikistore{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-3xl font-black font-orbitron mb-10 text-white uppercase tracking-wider">
+        TU <span class="text-friki-neon">INVENTARIO</span> DE COMPRA
+    </h1>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        {# Items List #}
+        <div class="lg:col-span-2 space-y-6">
+            {% for item in items %}
+                <div class="bg-friki-card border border-slate-800 rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-6 group hover:border-friki-neon/50 transition-all">
+                    <div class="w-24 h-24 bg-slate-900 rounded-xl overflow-hidden flex-shrink-0">
+                        <img src="{{ item.product.imagenUrl|default('https://placehold.co/200x200/1e293b/22c55e?text=' ~ item.product.nombre|url_encode) }}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-grow text-center sm:text-left">
+                        <h3 class="text-lg font-bold text-white group-hover:text-friki-neon transition-colors">{{ item.product.nombre }}</h3>
+                        <p class="text-slate-500 text-sm">{{ item.product.categoria }}</p>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <div class="text-right">
+                            <p class="text-white font-bold">{{ item.subtotal|number_format(2, ',', '.') }}€</p>
+                            <p class="text-slate-500 text-xs">{{ item.quantity }} x {{ item.product.precio|number_format(2, ',', '.') }}€</p>
+                        </div>
+                        <a href="{{ path('cart_remove', {'id': item.product.id}) }}" class="text-slate-500 hover:text-red-500 p-2 transition-colors">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="bg-friki-card border border-dashed border-slate-700 rounded-3xl p-20 text-center">
+                    <div class="text-6xl mb-6">🛒</div>
+                    <h2 class="text-2xl font-orbitron text-white mb-4">Tu carro está vacío</h2>
+                    <p class="text-slate-500 mb-8">Parece que aún no has encontrado ningún tesoro.</p>
+                    <a href="{{ path('product_index') }}" class="inline-block bg-friki-neon text-friki-dark font-black px-8 py-4 rounded-xl hover:bg-white transition-all">
+                        EXPLORAR TIENDA
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+        {# Summary #}
+        {% if items|length > 0 %}
+            <div class="lg:col-span-1">
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 sticky top-28">
+                    <h2 class="text-xl font-bold font-orbitron text-white mb-6 uppercase tracking-widest">Resumen</h2>
+                    <div class="space-y-4 mb-8">
+                        <div class="flex justify-between text-slate-400">
+                            <span>Subtotal</span>
+                            <span>{{ total|number_format(2, ',', '.') }}€</span>
+                        </div>
+                        <div class="flex justify-between text-slate-400">
+                            <span>Envíos Galácticos</span>
+                            <span class="text-friki-neon font-bold">GRATIS</span>
+                        </div>
+                        <div class="border-t border-slate-800 pt-4 flex justify-between text-white font-black text-xl">
+                            <span>TOTAL</span>
+                            <span class="text-friki-neon">{{ total|number_format(2, ',', '.') }}€</span>
+                        </div>
+                    </div>
+
+                    <a href="{{ path('cart_checkout') }}" class="block w-full text-center bg-friki-neon text-friki-dark font-black py-4 rounded-xl hover:bg-white transition-all transform active:scale-95 shadow-lg shadow-friki-neon/20 uppercase tracking-widest font-orbitron">
+                        FINALIZAR PEDIDO
+                    </a>
+                    
+                    <p class="mt-6 text-center text-xs text-slate-500">
+                        <i class="fa-solid fa-lock mr-2"></i> Pago 100% seguro y encriptado
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

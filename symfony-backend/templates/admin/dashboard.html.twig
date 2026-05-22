@@ -1,0 +1,95 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block admin_content %}
+    <header class="mb-10">
+        <h1 class="text-3xl font-black font-orbitron text-white">COMMAND <span class="text-friki-neon">CENTER</span></h1>
+        <p class="text-slate-500">Estado global del multiverso comercial</p>
+    </header>
+
+    {# Stats Grid #}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div class="bg-friki-card border border-slate-800 p-6 rounded-3xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <i class="fa-solid fa-coins text-4xl text-friki-neon"></i>
+            </div>
+            <p class="text-slate-500 text-xs font-black uppercase mb-2">Ingresos Totales</p>
+            <p class="text-3xl font-black text-white font-orbitron">{{ stats.ventas_totales|number_format(2, ',', '.') }}€</p>
+        </div>
+
+        <div class="bg-friki-card border border-slate-800 p-6 rounded-3xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <i class="fa-solid fa-cart-arrow-down text-4xl text-friki-neon"></i>
+            </div>
+            <p class="text-slate-500 text-xs font-black uppercase mb-2">Pedidos Realizados</p>
+            <p class="text-3xl font-black text-white font-orbitron">{{ stats.total_pedidos }}</p>
+        </div>
+
+        <div class="bg-friki-card border border-slate-800 p-6 rounded-3xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <i class="fa-solid fa-box-open text-4xl text-friki-neon"></i>
+            </div>
+            <p class="text-slate-500 text-xs font-black uppercase mb-2">Inventario Activo</p>
+            <p class="text-3xl font-black text-white font-orbitron">{{ stats.total_productos }}</p>
+        </div>
+
+        <div class="bg-friki-card border border-slate-800 p-6 rounded-3xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <i class="fa-solid fa-user-astronaut text-4xl text-friki-neon"></i>
+            </div>
+            <p class="text-slate-500 text-xs font-black uppercase mb-2">Ciudadanos</p>
+            <p class="text-3xl font-black text-white font-orbitron">{{ stats.total_usuarios }}</p>
+        </div>
+    </div>
+
+    {# Recent Activity #}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+            <div class="bg-friki-card border border-slate-800 rounded-3xl overflow-hidden">
+                <div class="p-6 border-b border-slate-800 flex justify-between items-center">
+                    <h2 class="font-black font-orbitron text-white text-lg">ÚLTIMAS TRANSACCIONES</h2>
+                    <a href="#" class="text-xs text-friki-neon hover:underline uppercase font-bold">Ver todo</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <tbody class="divide-y divide-slate-800">
+                            {% for pedido in pedidos %}
+                                <tr class="hover:bg-slate-800/30 transition-all">
+                                    <td class="px-6 py-4 font-mono text-sm text-friki-neon font-bold">{{ pedido.numeroPedido }}</td>
+                                    <td class="px-6 py-4 text-slate-400 text-sm">{{ pedido.createdAt|date('d/m H:i') }}</td>
+                                    <td class="px-6 py-4 text-white font-bold">{{ pedido.total|number_format(2, ',', '.') }}€</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 rounded-md text-[10px] font-black uppercase border border-yellow-500/30 text-yellow-500 bg-yellow-500/10">
+                                            {{ pedido.estado }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-1">
+            <div class="bg-friki-card border border-slate-800 rounded-3xl p-6">
+                <h2 class="font-black font-orbitron text-white text-lg mb-6">SISTEMA ALERTAS</h2>
+                <div class="space-y-4">
+                    <div class="p-4 bg-red-900/20 border border-red-500/30 rounded-xl flex items-start space-x-3">
+                        <i class="fa-solid fa-triangle-exclamation text-red-500 mt-1"></i>
+                        <div>
+                            <p class="text-sm font-bold text-red-200">Stock Crítico</p>
+                            <p class="text-xs text-red-400/80">3 productos están por debajo de 5 unidades.</p>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-blue-900/20 border border-blue-500/30 rounded-xl flex items-start space-x-3">
+                        <i class="fa-solid fa-info-circle text-blue-500 mt-1"></i>
+                        <div>
+                            <p class="text-sm font-bold text-blue-200">Servidor</p>
+                            <p class="text-xs text-blue-400/80">Latencia normal en el sector API-7.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

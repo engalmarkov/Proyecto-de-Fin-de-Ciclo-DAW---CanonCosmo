@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catálogo | Frikistore{% endblock %}
+
+{% block body %}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="flex flex-col md:flex-row gap-8">
+            
+            {# Sidebar Filters #}
+            <aside class="w-full md:w-64 flex-shrink-0">
+                <div class="sticky top-28 space-y-8">
+                    <div>
+                        <h3 class="font-orbitron text-lg mb-4 text-white">Categorías</h3>
+                        <div class="space-y-2">
+                            {% set cats = ['Todos', 'Videojuegos', 'Anime', 'Cómics', 'Juegos de mesa', 'Figuras', 'Ropa'] %}
+                            {% for cat in cats %}
+                                <a href="{{ cat == 'Todos' ? path('product_index') : path('product_index', {'categoria': cat}) }}" 
+                                   class="block px-4 py-2 rounded-lg transition-all {{ (app.request.get('categoria') == cat or (cat == 'Todos' and not app.request.get('categoria'))) ? 'bg-friki-neon text-friki-dark font-bold' : 'hover:bg-slate-800 text-slate-400 hover:text-white' }}">
+                                    {{ cat }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-orbitron text-lg mb-4 text-white">Rango de Precio</h3>
+                        <div class="px-2">
+                            <input type="range" min="0" max="500" step="10" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-friki-neon">
+                            <div class="flex justify-between mt-2 text-xs text-slate-500">
+                                <span>0€</span>
+                                <span>500€+</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-orbitron text-lg mb-4 text-white">Estado</h3>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 cursor-pointer group">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-friki-neon rounded border-slate-700 bg-slate-900 focus:ring-0">
+                                <span class="text-slate-400 group-hover:text-white transition-colors">En Stock</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer group">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-friki-neon rounded border-slate-700 bg-slate-900 focus:ring-0">
+                                <span class="text-slate-400 group-hover:text-white transition-colors">Ofertas</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer group">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-friki-neon rounded border-slate-700 bg-slate-900 focus:ring-0">
+                                <span class="text-slate-400 group-hover:text-white transition-colors">Preventa</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="w-full py-3 bg-slate-800 text-white rounded-xl font-bold border border-slate-700 hover:border-friki-neon transition-all">
+                        Limpiar Filtros
+                    </button>
+                </div>
+            </aside>
+
+            {# Product Grid Section #}
+            <div class="flex-grow">
+                {# Header & Sort #}
+                <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+                    <h2 class="text-2xl font-bold font-orbitron">
+                        PRODUCTOS <span class="text-friki-neon">{{ app.request.get('categoria')|default('TODOS')|upper }}</span>
+                        <span class="text-sm font-normal text-slate-500 ml-2">({{ products|default([])|length }} resultados)</span>
+                    </h2>
+                    <div class="flex items-center bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5">
+                        <label class="text-xs text-slate-500 mr-2">Ordenar por:</label>
+                        <select class="bg-transparent text-sm font-bold focus:ring-0 border-none outline-none">
+                            <option value="recent">Más recientes</option>
+                            <option value="price_asc">Precio: Menor a Mayor</option>
+                            <option value="price_desc">Precio: Mayor a Menor</option>
+                            <option value="popular">Más populares</option>
+                        </select>
+                    </div>
+                </div>
+
+                {# Grid #}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for producto in products|default([]) %}
+                        <div class="bg-friki-card rounded-2xl border border-slate-800 overflow-hidden group hover:border-friki-neon/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] relative">
+                            {# Glow effect background #}
+                            <div class="absolute -inset-1 bg-gradient-to-r from-friki-neon to-friki-accent opacity-0 group-hover:opacity-10 blur transition duration-500"></div>
+                            
+                            <div class="relative bg-friki-card h-full flex flex-col">
+                                <div class="relative h-64 overflow-hidden bg-slate-900">
+                                    <a href="{{ path('product_show', {'id': producto.id}) }}">
+                                        <img src="{{ producto.imagenUrl|default('https://placehold.co/600x600/1e293b/22c55e?text=' ~ producto.nombre|url_encode) }}" 
+                                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                                             alt="{{ producto.nombre }}">
+                                    </a>
+                                    {% if producto.stock <= 0 %}
+                                        <div class="absolute inset-0 bg-friki-dark/60 flex items-center justify-center">
+                                            <span class="bg-red-600 text-white px-4 py-1 rounded-full font-bold text-xs">AGOTADO</span>
+                                        </div>
+                                    {% endif %}
+                                    <div class="absolute top-4 right-4 bg-friki-dark/80 backdrop-blur px-3 py-1 rounded-lg border border-slate-700">
+                                        <span class="text-friki-neon font-bold text-sm">{{ producto.precio|number_format(2, ',', '.') }}€</span>
+                                    </div>
+                                </div>
+                                <div class="p-6 flex flex-col flex-grow">
+                                    <p class="text-friki-accent text-xs font-bold uppercase tracking-widest mb-1">{{ producto.categoria }}</p>
+                                    <a href="{{ path('product_show', {'id': producto.id}) }}" class="text-lg font-bold mb-4 line-clamp-1 group-hover:text-friki-neon transition-colors block">
+                                        {{ producto.nombre }}
+                                    </a>
+                                    <p class="text-slate-400 text-sm line-clamp-2 mb-6 h-10">
+                                        {{ producto.descripcion|default('Sin descripción disponible para este tesoro galáctico.') }}
+                                    </p>
+                                    <div class="flex items-center justify-between gap-2 mt-auto">
+                                        <a href="{{ path('product_show', {'id': producto.id}) }}" class="flex-grow text-center py-2 rounded-lg bg-slate-800 text-sm font-bold hover:bg-slate-700 transition-all border border-slate-700">
+                                            Detalles
+                                        </a>
+                                        <a href="{{ path('cart_add', {'id': producto.id}) }}" class="bg-friki-neon text-friki-dark p-2 rounded-lg hover:bg-white transition-all transform active:scale-90 {{ producto.stock <= 0 ? 'opacity-50 pointer-events-none' : '' }}">
+                                            <i class="fa-solid fa-cart-plus"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        {# No products message #}
+                        <div class="col-span-full py-20 text-center">
+                            <div class="text-6xl mb-6">🔍</div>
+                            <h3 class="text-2xl font-orbitron mb-2">No encontramos nada...</h3>
+                            <p class="text-slate-500">Parece que ese objeto está en otra galaxia. Prueba con otros filtros.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {# Pagination #}
+                <div class="mt-12 flex justify-center">
+                    <nav class="flex items-center space-x-2">
+                        <a href="#" class="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-friki-neon border border-slate-700"><i class="fa-solid fa-chevron-left"></i></a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-lg bg-friki-neon text-friki-dark font-bold">1</a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-800 text-slate-400 hover:text-white border border-slate-700 hover:border-friki-neon">2</a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-800 text-slate-400 hover:text-white border border-slate-700 hover:border-friki-neon">3</a>
+                        <span class="text-slate-600">...</span>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-800 text-slate-400 hover:text-white border border-slate-700 hover:border-friki-neon">12</a>
+                        <a href="#" class="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-friki-neon border border-slate-700"><i class="fa-solid fa-chevron-right"></i></a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

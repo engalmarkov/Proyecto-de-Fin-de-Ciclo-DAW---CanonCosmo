@@ -1,0 +1,95 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block admin_content %}
+    <header class="mb-10">
+        <a href="{{ path('admin_products') }}" class="text-slate-500 hover:text-friki-neon transition-colors text-sm font-bold uppercase tracking-widest">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Volver al Inventario
+        </a>
+        <h1 class="text-3xl font-black font-orbitron text-white mt-4 uppercase">
+            {{ producto.id ? 'EDITAR <span class="text-friki-accent">ARTEFACTO</span>' : 'NUEVO <span class="text-friki-neon">ARTEFACTO</span>' }}
+        </h1>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        {# Form Side #}
+        <div class="lg:col-span-2">
+            <form method="POST" class="bg-friki-card border border-slate-800 rounded-3xl p-8 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="col-span-full">
+                        <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Nombre del Item</label>
+                        <input type="text" name="nombre" value="{{ producto.nombre }}" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-friki-neon outline-none transition-all">
+                    </div>
+                    
+                    <div class="col-span-1">
+                        <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Categoría</label>
+                        <select name="categoria" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-friki-neon outline-none transition-all">
+                            {% for cat in ['Videojuegos', 'Anime', 'Cómics', 'Juegos de mesa', 'Figuras', 'Ropa'] %}
+                                <option value="{{ cat }}" {{ producto.categoria == cat ? 'selected' : '' }}>{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-span-1">
+                        <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Precio (€)</label>
+                        <input type="number" step="0.01" name="precio" value="{{ producto.precio }}" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-friki-neon outline-none transition-all">
+                    </div>
+
+                    <div class="col-span-1">
+                        <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Stock Inicial</label>
+                        <input type="number" name="stock" value="{{ producto.stock|default(0) }}" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-friki-neon outline-none transition-all">
+                    </div>
+
+                    <div class="col-span-1">
+                        <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">URL de la Imagen</label>
+                        <input type="url" name="imagen_url" value="{{ producto.imagenUrl }}" placeholder="https://..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-friki-neon outline-none transition-all">
+                    </div>
+
+                    <div class="col-span-full">
+                        <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Descripción del Lore</label>
+                        <textarea name="descripcion" rows="4" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-friki-neon outline-none transition-all">{{ producto.descripcion }}</textarea>
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-slate-800 flex justify-end space-x-4">
+                    <a href="{{ path('admin_products') }}" class="px-6 py-3 rounded-xl border border-slate-700 text-slate-400 font-bold hover:text-white transition-all">CANCELAR</a>
+                    <button type="submit" class="px-8 py-3 bg-friki-neon text-friki-dark font-black rounded-xl hover:bg-white transition-all transform active:scale-95 shadow-lg shadow-friki-neon/20 uppercase tracking-widest">
+                        {{ producto.id ? 'SINCRONIZAR CAMBIOS' : 'FORJAR ITEM' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {# Preview Side #}
+        <div class="lg:col-span-1">
+            <div class="sticky top-28">
+                <p class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Vista Previa del Holograma</p>
+                <div class="bg-friki-card rounded-3xl border border-friki-neon/30 p-6 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-t from-friki-neon/5 to-transparent"></div>
+                    <div class="relative h-64 rounded-2xl bg-slate-900 overflow-hidden mb-6 border border-slate-800">
+                        <img id="preview-img" src="{{ producto.imagenUrl|default('https://placehold.co/600x600/1e293b/22c55e?text=Holograma') }}" class="w-full h-full object-cover">
+                    </div>
+                    <h3 id="preview-name" class="text-xl font-bold text-white mb-2 font-orbitron">{{ producto.nombre|default('Nombre del Item') }}</h3>
+                    <p id="preview-price" class="text-friki-neon font-black text-lg">{{ producto.precio|default('0.00') }}€</p>
+                    <div class="mt-4 pt-4 border-t border-slate-800">
+                        <span id="preview-cat" class="text-[10px] font-black uppercase text-friki-accent">{{ producto.categoria|default('General') }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple JS for live preview
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('input', (e) => {
+                const name = e.target.name;
+                const value = e.target.value;
+                if (name === 'nombre') document.getElementById('preview-name').innerText = value || 'Nombre del Item';
+                if (name === 'precio') document.getElementById('preview-price').innerText = (value || '0.00') + '€';
+                if (name === 'categoria') document.getElementById('preview-cat').innerText = value;
+                if (name === 'imagen_url') document.getElementById('preview-img').src = value || 'https://placehold.co/600x600/1e293b/22c55e?text=Holograma';
+            });
+        });
+    </script>
+{% endblock %}

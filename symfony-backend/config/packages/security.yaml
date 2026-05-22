@@ -1,0 +1,72 @@
+security:
+    # Hasheador de contraseñas
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
+    # Proveedor de usuarios (apunta a tu entidad Usuario)
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\Usuario
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        # Firewall de Login API: Pública, recibe email/pass y devuelve el Token JWT
+        api_login:
+            pattern: ^/api/login
+            stateless: true
+            json_login:
+                check_path: /api/login
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        # Firewall de la API: Protege todo lo que empiece por /api pidiendo el Token
+        api:
+            pattern: ^/api
+            stateless: true
+            jwt: ~
+
+        # Firewall principal para la WEB (Twig)
+        main:
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+                default_target_path: app_home
+            logout:
+                path: app_logout
+                target: app_home
+
+    access_control:
+      # Rutas públicas WEB
+      - { path: ^/login, roles: PUBLIC_ACCESS }
+      - { path: ^/registro, roles: PUBLIC_ACCESS }
+      - { path: ^/productos, roles: PUBLIC_ACCESS }
+      - { path: ^/$, roles: PUBLIC_ACCESS }
+
+      # Rutas API
+      - { path: ^/api, roles: PUBLIC_ACCESS, methods: [ OPTIONS ] }
+      - { path: ^/api/login, roles: PUBLIC_ACCESS }
+      - { path: ^/api/register, roles: PUBLIC_ACCESS }
+
+      # Ejemplo de ruta protegida en la web (Carrito/Checkout)
+      - { path: ^/carrito/checkout, roles: IS_AUTHENTICATED_FULLY }
+
+      # Administración
+      - { path: ^/admin, roles: ROLE_ADMIN }
+      - { path: ^/api/admin, roles: ROLE_ADMIN }
+
+when@test:
+    security:
+        password_hashers:
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4
+                time_cost: 3
+                memory_cost: 10

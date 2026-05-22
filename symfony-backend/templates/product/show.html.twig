@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ producto.nombre|default('Detalle de Producto') }} | Frikistore{% endblock %}
+
+{% block body %}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {# Breadcrumbs #}
+        <nav class="flex mb-8 text-sm text-slate-500 font-medium">
+            <a href="{{ path('app_home') }}" class="hover:text-friki-neon">Inicio</a>
+            <span class="mx-2">/</span>
+            <a href="{{ path('product_index') }}" class="hover:text-friki-neon">Catálogo</a>
+            <span class="mx-2">/</span>
+            <span class="text-slate-300">{{ producto.nombre|default('Cargando...') }}</span>
+        </nav>
+
+        {% if producto is defined and producto is not null %}
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                {# Image Gallery #}
+                <div class="space-y-4">
+                    <div class="bg-friki-card rounded-3xl border border-slate-800 overflow-hidden relative group">
+                        <img src="{{ producto.imagenUrl|default('https://placehold.co/800x800/1e293b/22c55e?text=' ~ producto.nombre|url_encode) }}" 
+                             class="w-full h-auto object-cover aspect-square" 
+                             alt="{{ producto.nombre }}">
+                        
+                        {# Badge Zoom o similar #}
+                        <button class="absolute bottom-4 right-4 bg-friki-dark/60 p-3 rounded-full border border-slate-700 hover:bg-friki-neon hover:text-friki-dark transition-all">
+                            <i class="fa-solid fa-expand"></i>
+                        </button>
+                    </div>
+                    
+                    {# Thumbnails (Placeholders) #}
+                    <div class="grid grid-cols-4 gap-4">
+                        {% for i in 1..4 %}
+                            <div class="bg-friki-card rounded-xl border {{ i == 1 ? 'border-friki-neon shadow-[0_0_10px_rgba(34,197,94,0.2)]' : 'border-slate-800' }} overflow-hidden cursor-pointer hover:border-friki-neon transition-all">
+                                <img src="https://placehold.co/200x200/1e293b/{{ i == 1 ? '22c55e' : '64748b' }}?text=Img+{{ i }}" class="w-full h-auto opacity-70 hover:opacity-100">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {# Product Info #}
+                <div class="flex flex-col">
+                    <div class="mb-6">
+                        <span class="inline-block px-3 py-1 rounded-full bg-friki-accent/10 border border-friki-accent/30 text-friki-accent text-xs font-bold tracking-widest uppercase mb-4">
+                            {{ producto.categoria|default('General') }}
+                        </span>
+                        <h1 class="text-4xl md:text-5xl font-bold font-orbitron mb-4 leading-tight">{{ producto.nombre }}</h1>
+                        
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="flex text-yellow-500">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star-half-stroke"></i>
+                            </div>
+                            <span class="text-slate-500 text-sm">(4.5/5 basado en 128 opiniones)</span>
+                        </div>
+
+                        <div class="text-3xl font-bold text-friki-neon mb-8">
+                            {{ producto.precio|number_format(2, ',', '.') }}€
+                            <span class="text-sm font-normal text-slate-500 line-through ml-3">{{ (producto.precio * 1.2)|number_format(2, ',', '.') }}€</span>
+                        </div>
+                    </div>
+
+                    <div class="prose prose-invert max-w-none mb-10 text-slate-400">
+                        <p class="text-lg leading-relaxed">
+                            {{ producto.descripcion|default('Este increíble artículo de colección es indispensable para cualquier fan devoto. Fabricado con materiales de alta calidad y detalles minuciosos que capturan la esencia del universo al que pertenece.') }}
+                        </p>
+                    </div>
+
+                    {# Purchase Box #}
+                    <div class="bg-slate-900/50 p-8 rounded-3xl border border-slate-800 mb-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 rounded-full {{ producto.stock > 0 ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-red-500' }}"></div>
+                                <span class="{{ producto.stock > 0 ? 'text-green-400' : 'text-red-400' }} font-bold text-sm">
+                                    {{ producto.stock > 0 ? 'EN STOCK (Envío 24/48h)' : 'SIN STOCK' }}
+                                </span>
+                            </div>
+                            <span class="text-slate-500 text-sm">SKU: FS-{{ producto.id|default('000') }}-{{ random(100, 999) }}</span>
+                        </div>
+
+                        <form action="{{ path('cart_add', {'id': producto.id}) }}" method="POST" class="flex flex-col sm:flex-row gap-4">
+                            <div class="flex items-center bg-slate-800 rounded-xl px-4 py-2 border border-slate-700">
+                                <button type="button" onclick="decrementQty()" class="p-2 text-slate-400 hover:text-white"><i class="fa-solid fa-minus"></i></button>
+                                <input type="number" name="quantity" id="quantity-input" value="1" min="1" max="{{ producto.stock|default(10) }}" class="w-12 bg-transparent border-none text-center focus:ring-0 font-bold text-white">
+                                <button type="button" onclick="incrementQty()" class="p-2 text-slate-400 hover:text-white"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                            
+                            <button type="submit" class="flex-grow bg-friki-neon text-friki-dark font-black py-4 px-8 rounded-xl hover:bg-white transition-all transform active:scale-95 flex items-center justify-center space-x-3 shadow-lg shadow-friki-neon/10 {{ producto.stock <= 0 ? 'opacity-50 pointer-events-none' : '' }}" {{ producto.stock <= 0 ? 'disabled' : '' }}>
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <span>AÑADIR AL CARRO</span>
+                            </button>
+                            
+                            <button type="button" class="p-4 bg-slate-800 text-white rounded-xl border border-slate-700 hover:text-red-500 hover:border-red-500 transition-all">
+                                <i class="fa-regular fa-heart text-xl"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <script>
+                        function incrementQty() {
+                            const input = document.getElementById('quantity-input');
+                            const max = parseInt(input.getAttribute('max'));
+                            if (parseInt(input.value) < max) {
+                                input.value = parseInt(input.value) + 1;
+                            }
+                        }
+                        function decrementQty() {
+                            const input = document.getElementById('quantity-input');
+                            if (parseInt(input.value) > 1) {
+                                input.value = parseInt(input.value) - 1;
+                            }
+                        }
+                    </script>
+
+                    {# Extra Perks #}
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="flex items-center space-x-3 text-sm text-slate-400">
+                            <i class="fa-solid fa-shield-halved text-friki-neon"></i>
+                            <span>Garantía de Autenticidad</span>
+                        </div>
+                        <div class="flex items-center space-x-3 text-sm text-slate-400">
+                            <i class="fa-solid fa-truck-fast text-friki-neon"></i>
+                            <span>Envío Galáctico Seguro</span>
+                        </div>
+                        <div class="flex items-center space-x-3 text-sm text-slate-400">
+                            <i class="fa-solid fa-rotate-left text-friki-neon"></i>
+                            <span>30 días para cambios</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Tabs Section #}
+            <div class="mt-20">
+                <div class="border-b border-slate-800">
+                    <nav class="flex space-x-8">
+                        <button class="border-b-2 border-friki-neon pb-4 text-white font-bold px-4 transition-all">Descripción Detallada</button>
+                        <button class="border-b-2 border-transparent pb-4 text-slate-500 hover:text-white px-4 transition-all">Especificaciones</button>
+                        <button class="border-b-2 border-transparent pb-4 text-slate-500 hover:text-white px-4 transition-all">Valoraciones (128)</button>
+                    </nav>
+                </div>
+                <div class="py-8 text-slate-400 leading-relaxed max-w-4xl">
+                    <h3 class="text-xl font-bold text-white mb-4">Sobre este producto</h3>
+                    <p class="mb-4">
+                        {{ producto.descripcion|default('No hay una descripción detallada para este producto.') }}
+                    </p>
+                    <ul class="list-disc pl-5 space-y-2 mt-6">
+                        <li>Producto 100% oficial con licencia.</li>
+                        <li>Acabados premium y pintura de alta precisión.</li>
+                        <li>Edición limitada para coleccionistas.</li>
+                        <li>Incluye certificado de autenticidad en la caja.</li>
+                    </ul>
+                </div>
+            </div>
+        {% else %}
+            <div class="text-center py-24">
+                <i class="fa-solid fa-ghost text-6xl text-slate-700 mb-6"></i>
+                <h2 class="text-3xl font-orbitron mb-4">Error 404: Objeto no encontrado</h2>
+                <p class="text-slate-500 mb-8">Parece que este producto ha sido borrado de la base de datos imperial.</p>
+                <a href="{{ path('product_index') }}" class="px-8 py-4 bg-friki-neon text-friki-dark font-black rounded-xl hover:bg-white transition-all">
+                    VOLVER AL CATÁLOGO
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

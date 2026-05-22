@@ -1,0 +1,75 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block admin_content %}
+    <header class="mb-10 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-black font-orbitron text-white">GESTIÓN DE <span class="text-friki-neon">INVENTARIO</span></h1>
+            <p class="text-slate-500">Añade o modifica los artefactos del catálogo</p>
+        </div>
+        <a href="{{ path('admin_product_new') }}" class="bg-friki-neon text-friki-dark font-black px-6 py-3 rounded-xl hover:bg-white transition-all transform active:scale-95 flex items-center space-x-2">
+            <i class="fa-solid fa-plus"></i>
+            <span>NUEVO ARTEFACTO</span>
+        </a>
+    </header>
+
+    <div class="bg-friki-card border border-slate-800 rounded-3xl overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="bg-slate-900/50 border-b border-slate-800 text-xs font-black text-slate-500 uppercase tracking-widest">
+                        <th class="px-6 py-4">ID</th>
+                        <th class="px-6 py-4">Imagen</th>
+                        <th class="px-6 py-4">Nombre</th>
+                        <th class="px-6 py-4">Categoría</th>
+                        <th class="px-6 py-4">Precio</th>
+                        <th class="px-6 py-4">Stock</th>
+                        <th class="px-6 py-4">Estado</th>
+                        <th class="px-6 py-4 text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800">
+                    {% for producto in productos %}
+                        <tr class="hover:bg-slate-800/30 transition-all group">
+                            <td class="px-6 py-4 font-mono text-xs text-slate-500">#{{ producto.id }}</td>
+                            <td class="px-6 py-4">
+                                <img src="{{ producto.imagenUrl|default('https://placehold.co/40x40/1e293b/22c55e?text=' ~ producto.nombre|first) }}" class="w-10 h-10 rounded-lg object-cover">
+                            </td>
+                            <td class="px-6 py-4 text-white font-bold text-sm">{{ producto.nombre }}</td>
+                            <td class="px-6 py-4">
+                                <span class="text-[10px] font-black uppercase text-friki-accent">{{ producto.categoria }}</span>
+                            </td>
+                            <td class="px-6 py-4 text-white font-bold text-sm">{{ producto.precio }}€</td>
+                            <td class="px-6 py-4">
+                                <span class="font-mono {{ producto.stock < 5 ? 'text-red-500 animate-pulse' : 'text-slate-400' }}">
+                                    {{ producto.stock }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{{ path('admin_product_toggle', {'id': producto.id}) }}" class="flex items-center space-x-2 cursor-pointer">
+                                    <div class="w-10 h-5 rounded-full relative transition-colors {{ producto.activo ? 'bg-friki-neon/30' : 'bg-slate-800' }}">
+                                        <div class="absolute top-1 w-3 h-3 rounded-full transition-all {{ producto.activo ? 'right-1 bg-friki-neon' : 'left-1 bg-slate-500' }}"></div>
+                                    </div>
+                                    <span class="text-[10px] font-bold {{ producto.activo ? 'text-friki-neon' : 'text-slate-500' }}">
+                                        {{ producto.activo ? 'ONLINE' : 'OFFLINE' }}
+                                    </span>
+                                </a>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex justify-end space-x-2">
+                                    <a href="{{ path('admin_product_edit', {'id': producto.id}) }}" class="p-2 bg-slate-800 text-slate-400 rounded-lg hover:text-white hover:bg-slate-700 transition-all">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <form action="{{ path('admin_product_delete', {'id': producto.id}) }}" method="POST" onsubmit="return confirm('¿Seguro que quieres borrar este artefacto del multiverso?');" class="inline">
+                                        <button type="submit" class="p-2 bg-slate-800 text-slate-400 rounded-lg hover:text-red-500 hover:bg-red-900/20 transition-all">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
