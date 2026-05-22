@@ -1,6 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core'; // 1. Añadimos OnInit e inject
+import { Component, OnInit, inject } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http'; // 2. Importamos HttpClient
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-calendario-juegos',
@@ -22,14 +22,13 @@ import { HttpClient } from '@angular/common/http'; // 2. Importamos HttpClient
     </div>
   `
 })
-// 3. Implementamos OnInit
+
 export class CalendarioJuegosComponent implements OnInit {
-  private http = inject(HttpClient); // Inyectamos el servicio HTTP
+  private http = inject(HttpClient); 
   
-  calendario: any[] = []; // Lo inicializamos vacío
+  calendario: any[] = []; 
 
   ngOnInit() {
-    // Aquí es donde lo pones:
     this.http.get('http://localhost:8000/api/calendario').subscribe({
       next: (data: any) => {
         this.calendario = data;

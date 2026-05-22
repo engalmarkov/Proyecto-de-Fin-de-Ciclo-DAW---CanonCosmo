@@ -60,7 +60,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function getEmail(): ?string { return $this->email; }
     public function setEmail(string $email): static { $this->email = $email; return $this; }
 
-    // Requerido por UserInterface
     public function getUserIdentifier(): string { return (string) $this->email; }
 
     public function getRoles(): array
@@ -74,7 +73,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function getPassword(): ?string { return $this->password; }
     public function setPassword(string $password): static { $this->password = $password; return $this; }
 
-    // Requerido por UserInterface, podemos dejarlo vacío
     public function eraseCredentials(): void {}
 
     public function getNombre(): ?string { return $this->nombre; }

@@ -19,8 +19,8 @@ class UserFixtures extends Fixture
         $admin->setEmail('admin@frikistore.com');
         $admin->setRoles(['ROLE_ADMIN']);
         $admin->setPassword($this->passwordHasher->hashPassword($admin, '123456'));
-        $admin->setNombre('Admin'); // <-- Añadimos el nombre
-        $admin->setApellidos('Canon Cosmo'); // <-- Añadimos los apellidos
+        $admin->setNombre('Admin'); 
+        $admin->setApellidos('Canon Cosmo'); 
         
         $manager->persist($admin);
 
@@ -29,8 +29,8 @@ class UserFixtures extends Fixture
         $user->setEmail('user@frikistore.com');
         $user->setRoles(['ROLE_USER']);
         $user->setPassword($this->passwordHasher->hashPassword($user, '123456'));
-        $user->setNombre('Angel'); // <-- Añadimos el nombre
-        $user->setApellidos('Espinosa'); // <-- Añadimos los apellidos
+        $user->setNombre('Angel');
+        $user->setApellidos('Espinosa');
         
         $manager->persist($user);
 

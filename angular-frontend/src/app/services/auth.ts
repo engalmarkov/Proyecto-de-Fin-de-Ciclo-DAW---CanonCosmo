@@ -39,10 +39,6 @@ export class AuthService {
     }
   }
 
-  /**
-   * Pide el perfil real a Symfony.
-   * Modificado para manejar la respuesta: { user: {...}, pedidos: [...] }
-   */
   getUserProfile(freshToken: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/perfil`, {
       headers: { 
@@ -51,7 +47,6 @@ export class AuthService {
       }
     }).pipe(
       tap(response => {
-        // Extraemos solo el objeto user de la respuesta anidada de Symfony
         if (response && response.user) {
           localStorage.setItem('frikistore_user', JSON.stringify(response.user));
           this.currentUser.set(response.user);

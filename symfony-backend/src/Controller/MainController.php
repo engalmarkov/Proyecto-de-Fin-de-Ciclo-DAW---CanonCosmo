@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class MainController extends AbstractController
 {
-    #[Route('/api/novedades', name: 'app_novedades')] // Cambiar la ruta a algo descriptivo
+    #[Route('/api/novedades', name: 'app_novedades')]
     public function index(ProductoRepository $productoRepository): JsonResponse //
     {
         // Obtenemos los últimos 4 productos activos

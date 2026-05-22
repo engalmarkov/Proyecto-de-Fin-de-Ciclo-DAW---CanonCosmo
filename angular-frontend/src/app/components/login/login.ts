@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth'; // Asegúrate de que la ruta al servicio sea correcta
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +12,7 @@ import { AuthService } from '../../services/auth'; // Asegúrate de que la ruta 
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
-export class LoginComponent { // <--- ESTO es lo que busca el app.routes.ts
+export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -35,7 +35,7 @@ onSubmit() {
           this.router.navigate(['/perfil']);
         },
         error: () => {
-          this.error = 'Credenciales incorrectas. ¿Has olvidado tu contraseña de la nave?';
+          this.error = 'Credenciales incorrectas. ¿Has olvidado tu contraseña?';
           this.loading = false;
         }
       });

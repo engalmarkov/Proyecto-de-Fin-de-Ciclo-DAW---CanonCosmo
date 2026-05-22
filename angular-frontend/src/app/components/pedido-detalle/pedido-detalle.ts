@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { OrderService } from '../../services/order'; // Asegúrate de tener este servicio
+import { OrderService } from '../../services/order';
 
 @Component({
     selector: 'app-pedido-detalle',

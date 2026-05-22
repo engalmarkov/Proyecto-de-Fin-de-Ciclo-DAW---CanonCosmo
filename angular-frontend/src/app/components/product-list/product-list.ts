@@ -20,7 +20,7 @@ export class ProductListComponent implements OnInit {
   categoriaActual: string = 'Todos';
   loading: boolean = true;
 
-  categorias = ['Todos', 'Videojuegos', 'Anime & Manga', 'Cómics', 'Juegos de mesa', 'Figuras', 'Ropa'];
+  categorias = ['Todos', 'Videojuegos', 'Anime & Manga', 'Cómics', 'Juegos de cartas', 'Figuras', 'Ropa'];
 
   // --- VARIABLES PARA EL TOAST ---
   mostrarToast: boolean = false;
@@ -32,7 +32,7 @@ export class ProductListComponent implements OnInit {
       const esOferta = params['ofertas'] === 'true';
       const esReserva = params['reservas'] === 'true';
       const esMasVendido = params['mas_vendidos'] === 'true';
-      const terminoBusqueda = params['buscar']; // <-- 1. CAPTURAMOS LA BÚSQUEDA
+      const terminoBusqueda = params['buscar'];
 
       // 2. Si no hay categoría en la URL, por defecto es 'Todos'
       this.categoriaActual = params['categoria'] || 'Todos';

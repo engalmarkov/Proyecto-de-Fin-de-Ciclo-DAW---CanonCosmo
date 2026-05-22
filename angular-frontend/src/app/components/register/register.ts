@@ -36,7 +36,7 @@ export class RegisterComponent {
           this.router.navigate(['/login']);
         },
         error: (err) => {
-          this.error = 'Error al forjar la cuenta. El email ya podría estar en uso.';
+          this.error = 'Error al registrar la cuenta. El email ya podría estar en uso.';
           this.loading = false;
         }
       });

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
-import { NavbarComponent } from './components/navbar/navbar'; // <--- Cambiado aquí
+import { NavbarComponent } from './components/navbar/navbar'; 
 
 @Component({
   selector: 'app-root',
@@ -8,7 +8,7 @@ import { NavbarComponent } from './components/navbar/navbar'; // <--- Cambiado a
   imports: [
     RouterOutlet, 
     RouterLink, 
-    NavbarComponent // <--- Y cambiado aquí
+    NavbarComponent 
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'

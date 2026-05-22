@@ -12,10 +12,8 @@ export interface CartItem {
   providedIn: 'root'
 })
 export class CartService {
-  // Inyectamos el HttpClient para poder hablar con Symfony
   private http = inject(HttpClient);
 
-  // Usamos Signals de Angular para que la UI se actualice automáticamente
   private items = signal<CartItem[]>(this.loadCart());
 
   cartItems = this.items.asReadonly();

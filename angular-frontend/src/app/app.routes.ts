@@ -19,9 +19,6 @@ import { PedidoDetalleComponent } from './components/pedido-detalle/pedido-detal
 import { CalendarioJuegosComponent } from './components/calendario-juegos/calendario-juegos';
 import { AdminCalendarioComponent } from './components/admin/admin-calendario';
 
-// Importaremos los componentes de admin aquí arriba según los vayamos creando
-// import { AdminDashboardComponent } from './components/admin/dashboard/dashboard';
-
 export const routes: Routes = [
   // --- RUTAS PÚBLICAS Y DE USUARIO ---
   { path: '', component: HomeComponent },
@@ -38,19 +35,18 @@ export const routes: Routes = [
   { path : 'faq', component: FaqComponent },
   { path : 'contacto', component: ContactoComponent },
   { path: 'calendario', component: CalendarioJuegosComponent },
+
   // --- PANEL DE ADMINISTRACIÓN ---
   { 
     path: 'admin', 
     canActivate: [adminGuard],
     children: [
-      // Aquí iremos enganchando las páginas del panel según las creemos:
       
     { path: '', component: AdminDashboardComponent },
     { path: 'productos', component: AdminProductosComponent },
     { path: 'productos/nuevo', component: AdminProductoFormComponent },
     { path: 'productos/editar/:id', component: AdminProductoFormComponent },
     { path: 'calendario', component: AdminCalendarioComponent },
-      // { path: 'usuarios', component: AdminUsuariosComponent }, // (/admin/usuarios)
     ]
   },
 

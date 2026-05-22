@@ -4,10 +4,10 @@
       
       <div class="text-center">
           <h2 class="mt-6 text-3xl font-black font-orbitron text-white uppercase tracking-tighter">
-              CREA TU <span class="text-friki-accent">PERFIL DE HÉROE</span>
+              CREA TU <span class="text-friki-accent">PERFIL</span>
           </h2>
           <p class="mt-2 text-sm text-slate-400">
-              Únete a la mayor comunidad de coleccionistas del multiverso
+              Únete a la mayor comunidad de coleccionistas y jugadores de Tenerife. Regístrate para acceder a tu perfil, gestionar tus pedidos y descubrir ofertas exclusivas.
           </p>
       </div>
 
@@ -39,15 +39,15 @@
               <button type="submit" 
                       [disabled]="registerForm.invalid || loading"
                       class="group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-black rounded-xl text-white bg-friki-accent hover:bg-white hover:text-friki-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-friki-accent transition-all transform active:scale-95 shadow-lg shadow-friki-accent/20 uppercase tracking-widest font-orbitron disabled:opacity-50">
-                  <span *ngIf="!loading">FORJAR CUENTA</span>
-                  <span *ngIf="loading" class="animate-pulse">FORJANDO...</span>
+                  <span *ngIf="!loading">CREAR CUENTA</span>
+                  <span *ngIf="loading" class="animate-pulse">CREANDO...</span>
               </button>
           </div>
       </form>
 
       <div class="text-center mt-6">
           <p class="text-slate-400 text-sm">
-              ¿Ya tienes rango en la resistencia? 
+              ¿Ya tienes eres parte de nuestra comunidad? 
               <a routerLink="/login" class="font-bold text-friki-accent hover:text-white transition-colors">Inicia sesión</a>
           </p>
       </div>
