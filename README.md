@@ -160,7 +160,7 @@ npm start
 ```
 
 <a name="uso-es"></a>
-## 💻 Uso
+## Uso
 
 ### Desarrollo Frontend
 
@@ -203,24 +203,6 @@ symfony console make:entity
 
 ### Variables de Entorno
 
-#### Backend (`.env`)
-
-```env
-# Base de Datos
-DATABASE_URL="mysql://user:password@localhost:3306/frikistore"
-
-# Seguridad JWT
-JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
-JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
-
-# CORS
-CORS_ALLOW_ORIGIN=^https?://localhost(:[0-9]+)?$
-
-# Ambiente
-APP_ENV=dev
-APP_DEBUG=true
-```
-
 #### Frontend (`.env` o `environment.ts`)
 
 ```typescript
@@ -231,7 +213,7 @@ export const environment = {
 ```
 
 <a name="estructura-del-proyecto-es"></a>
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ### Backend Symfony
 
